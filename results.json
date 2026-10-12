@@ -1,0 +1,34 @@
+{
+  "question": "Under a fixed memory cap, can a pilot-run parameter search for plain BKW on small simulated LPN instances recover the secret more often than a hand-picked textbook BKW parameter rule?",
+  "method": "Simulated LPN (n=24, noise 0.125). Baseline: plain BKW with ceil(log2 n) near-equal blocks and a fixed sample count. Improved: same BKW code with number of blocks, block sizes and sample count searched on pilot instances under the baseline's table-memory cap. Evaluated on 200 fresh held-out instances per seed (seeds 42, 43, 44).",
+  "dataset": {
+    "name": "Simulated LPN instances (n=24, tau=0.125)",
+    "source_url": "simulated with numpy, no download",
+    "n_rows": 210,
+    "n_train": 10,
+    "n_test": 200,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "full-secret recovery rate on held-out instances",
+  "higher_is_better": true,
+  "baseline": "Plain BKW, textbook rule: 5 blocks of sizes [5, 5, 5, 5, 4], 65536 samples.",
+  "improved": "Plain BKW with pilot-searched parameters: block sizes [5, 6, 13], 1024 samples, chosen by pilot success then time, table capacity <= 124 vectors.",
+  "metrics": {
+    "baseline_score": 0.645,
+    "improved_score": 0.9733333333333333,
+    "baseline_score_std": 0.06940220937885669,
+    "improved_score_std": 0.016996731711975962,
+    "baseline_mean_time_s": 0.01248369686166638,
+    "improved_mean_time_s": 0.00048101139500043177,
+    "baseline_peak_stored_vectors": 124.0,
+    "improved_peak_stored_vectors": 94.0,
+    "memory_cap_vectors": 124.0,
+    "pilot_success_of_chosen": 1.0,
+    "n_configs_searched": 632.0,
+    "improved_num_samples": 1024.0,
+    "baseline_num_samples": 65536.0,
+    "improvement": 0.32833333333333325
+  },
+  "notes": "Dissection-BKW was not implemented (paper details unavailable); baseline is a stand-in textbook BKW. Rows = instances (10 pilot, 200 held-out per seed, 65536 samples each); the algorithms are deterministic, seeds change the held-out instances. Memory cap = sum of (2^b-1) over reduced blocks of the baseline; peak stored vectors = max actual table entries. The final-block Walsh-Hadamard accumulator (2^r counters) and the retained sample batches (re-generable stream) are not counted as stored vectors, which favours configurations with a large last block. Per-run wall-clock limit 5 s (overruns count as failure). Pilot set is small (10 instances), configs with 0/3 early successes are pruned."
+}
