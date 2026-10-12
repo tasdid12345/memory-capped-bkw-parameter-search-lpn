@@ -21,6 +21,31 @@ python analysis.py
 ## Results
 Results are written to results.json (and a chart to figures/).
 
+## Results (latest run)
+
+On simulated LPN instances (n=24, noise 0.125), a standard BKW with hand-chosen textbook parameters recovered the full secret on 64.5% of 200 held-out instances, while pilot-searched plain BKW reached 97.3% under the same 124-vector memory cap.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 0.645 |
+| improved_score | 0.9733 |
+| baseline_score_std | 0.0694 |
+| improved_score_std | 0.017 |
+| baseline_mean_time_s | 0.01248 |
+| improved_mean_time_s | 0.000481 |
+| baseline_peak_stored_vectors | 124 |
+| improved_peak_stored_vectors | 94 |
+| memory_cap_vectors | 124 |
+| pilot_success_of_chosen | 1 |
+| n_configs_searched | 632 |
+| improved_num_samples | 1024 |
+| baseline_num_samples | 65536 |
+| improvement | 0.3283 |
+
+Run on 2026-10-12. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Dissection-BKW was not implemented (paper details unavailable); baseline is a stand-in textbook BKW. Rows = instances (10 pilot, 200 held-out per seed, 65536 samples each); the algorithms are deterministic, seeds change the held-out instances. Memory cap = sum of (2^b-1) over reduced blocks of the baseline; peak stored vectors = max actual table entries. The final-block Walsh-Hadamard accumulator (2^r counters) and the retained sample batches (re-generable stream) are not counted as stored vectors, which favours configurations with a large last block. Per-run wall-clock limit 5 s (overruns count as failure). Pilot set is small (10 instances), configs with 0/3 early successes are pruned.
+
 ## Reference
 
 This project is motivated by the following paper:
